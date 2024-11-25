@@ -20,5 +20,22 @@ pipeline {
         failure {
             echo 'Python script execution failed.'
         }
+	 stage('Push to DockerHub') {
+            steps {
+                script {
+                    try {
+                        withCredentials([usernamePassword(credentialsId: 'my-docker-hub-credentials-id', usernameVariable: 'DOCKER_USERNAME', password>
+                            sh """
+                                echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                                docker push ${DOCKER_IMAGE_NAME}:${IMAGE_TAG}
+                            """
+                        }
+                    } catch (Exception e) {
+                        echo "Failed to push Docker Image to registry: ${e.message}"
+                        error "Failed to push Docker Image"
+                    }
+                }
+            }
+
     }
 }
