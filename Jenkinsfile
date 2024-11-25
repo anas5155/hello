@@ -10,7 +10,7 @@ pipeline {
         stage('Run Python Script') {
             steps {
                 // Run the Python script (make sure 'python' is available on the agent)
-                sh 'python hello.py'
+                sh 'python3 hello.py'
             }
         }
         stage('Build Docker Image') {
