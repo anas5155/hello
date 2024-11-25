@@ -20,6 +20,19 @@ pipeline {
         failure {
             echo 'Python script execution failed.'
         }
+	stage('Build Docker Image') {
+            steps {
+                script {
+                    try {
+                        docker.build("${DOCKER_IMAGE_NAME}:${IMAGE_TAG}")
+                    } catch (Exception e) {
+                        echo "Failed to build docker image: ${e.message}"
+                        error "Failed to build docker image"
+                    }
+                }
+            }
+        }
+
 	 stage('Push to DockerHub') {
             steps {
                 script {
